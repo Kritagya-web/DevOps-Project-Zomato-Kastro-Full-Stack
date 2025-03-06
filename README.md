@@ -1,68 +1,139 @@
-# 🚀 **DevOps Project: ZOMATO Clone App Deployment**
+# DevOps Project - Zomato Deployment
 
-In this **DevOps project**, I demonstrate how to **deploy a ZOMATO Clone App** using a variety of modern DevOps tools and services.
+## Overview
 
-## 🛠️ Tools & Services Used:
+This project demonstrates the **end-to-end deployment** of a **Zomato Clone** using **DevOps practices**, including **Jenkins, Docker, Kubernetes (EKS), Prometheus, Grafana, ArgoCD**, and **various security tools** such as **SonarQube, OWASP, Trivy, and Docker Scout**.
 
-1. **GitHub** ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)
-2. **Jenkins** ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=flat-square&logo=jenkins&logoColor=white)
-3. **SonarQube** ![SonarQube](https://img.shields.io/badge/SonarQube-4E9BCD?style=flat-square&logo=sonarqube&logoColor=white)
-4. **Docker** ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-5. **Kubernetes** ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
-6. **Prometheus** ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
-7. **Grafana** ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
-8. **ArgoCD** ![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=flat-square&logo=argo&logoColor=white)
-9. **OWASP** ![OWASP](https://img.shields.io/badge/OWASP-000000?style=flat-square&logo=owasp&logoColor=white)
-10. **Trivy** ![Trivy](https://img.shields.io/badge/Trivy-00979D?style=flat-square&logo=trivy&logoColor=white)
+## Features
+
+- **CI/CD Pipeline**: Implemented using **Jenkins** for automated deployment.
+- **Security Integration**: Utilized **SonarQube, OWASP, Trivy, and Docker Scout** for vulnerability scanning.
+- **Containerized Deployment**: **Dockerized** the application and deployed it on **AWS EKS (Kubernetes)**.
+- **Monitoring**: Configured **Prometheus, Grafana, and Node Exporter** for application and infrastructure monitoring.
+- **ArgoCD**: Implemented for GitOps-based Kubernetes application deployment.
+
+## Prerequisites
+
+Before proceeding with the setup, ensure you have:
+
+- **AWS Account** with necessary IAM permissions.
+- **Basic knowledge of DevOps tools** such as Jenkins, Docker, and Kubernetes.
+- **Installed dependencies**: AWS CLI, Docker, Jenkins, SonarQube, Trivy, Terraform, and Kubernetes CLI (`kubectl`).
+
+## Deployment Steps
+
+### Step 1: Setting up an AWS EC2 Instance
+
+1. **Launch an Ubuntu EC2 instance** (`t2.large`, `30GB` storage).
+2. Assign an **IAM role** with necessary permissions.
+
+### Step 2: Install Required Tools
+
+Install **AWS CLI**, **Jenkins**, **Docker**, **Trivy**, **Docker Scout**, and **SonarQube**:
+
+```bash
+sudo apt update -y
+sudo apt install -y awscli unzip docker.io jenkins terraform
+```
+
+Run **SonarQube**:
+
+```bash
+docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+```
+
+### Step 3: Configure Jenkins
+
+1. Install **Jenkins Plugins** for Terraform, SonarQube, NodeJS, OWASP, Docker.
+2. Configure **Jenkins Pipeline Jobs** to:
+   - Checkout the repository.
+   - Run **static code analysis** using **SonarQube**.
+   - Scan files using **OWASP, Trivy, and Docker Scout**.
+   - Build and push **Docker images**.
+   - Deploy the application on **Kubernetes (EKS)**.
+
+### Step 4: Kubernetes Deployment
+
+1. Apply Kubernetes **deployment and service manifests**:
+
+```bash
+kubectl apply -f deployment.yml
+kubectl apply -f service.yml
+```
+
+2. Retrieve the **Load Balancer URL** and access the application.
+
+### Step 5: Monitoring Setup
+
+1. Install **Prometheus, Node Exporter, and Grafana** for monitoring.
+2. Configure **Jenkins job metrics** scraping using Prometheus.
+3. Visualize dashboards in **Grafana**.
+
+### Step 6: ArgoCD Deployment
+
+1. Install **ArgoCD** in Kubernetes:
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
+```
+
+2. Expose **ArgoCD** via LoadBalancer:
+
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+```
+
+### Step 7: Clean-Up
+
+To remove the **EKS cluster**:
+
+```bash
+eksctl delete cluster kastrocluster
+```
+
+Terminate the **EC2 instance** and delete **IAM Role**.
+
+## Tools & Technologies Used
+
+- **AWS** (EC2, EKS, IAM, S3)
+- **Jenkins** (CI/CD Pipeline)
+- **Docker & Kubernetes** (Containerization & Orchestration)
+- **Terraform** (Infrastructure as Code)
+- **SonarQube, OWASP, Trivy, Docker Scout** (Security Analysis)
+- **Prometheus, Grafana, Node Exporter** (Monitoring & Logging)
+- **ArgoCD** (GitOps-based Kubernetes Deployment)
+- **GitHub** (Version Control)
+
+## Project Repository
+
+🔗 [GitHub Repository](https://github.com/KastroVKiran/DevOps-Project-Zomato-Kastro.git)
 
 ---
 
-### Project Stages:
+## Credit
 
-1. **Stage 1** - Deployment of App to Docker Container
-2. **Stage 2** - Deployment of App to K8S Cluster with Monitoring
-
----
-
-### 📂 GitHub Repo Link:  
-[**ZOMATO Clone DevOps Project**](#)
-
-### 📹 DevOps Project Video Link:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://youtu.be/GyoI6-I68aQ)
-
-### 📺 Docker Playlist Video Link:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://www.youtube.com/playlist?list=PLs-PsDpuAuTeNx3OgGQ1QrpNBo-XE6VBh)
+This project was **inspired** by the amazing work of [KastroVKiran](https://github.com/KastroVKiran). Their **detailed documentation** and insights significantly helped in understanding and implementing **DevOps best practices** for this deployment. A huge thanks for sharing this **valuable content** with the community!
 
 ---
 
-## 📂 Other DevOps Projects
+## Connect with Me
 
-### 🟠 **SWIGGY App Project**:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://youtu.be/x55z7rk0NAU)
+For any questions or discussions, feel free to reach out:
 
-### 🔵 **SonarQube Video Link**:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=sonarqube&logoColor=white)](https://youtu.be/ScdedztTaAU)
-
-### 🟡 **Nexus Video Link**:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=nexus&logoColor=white)](https://youtu.be/opJAfDOCZuI)
+- **GitHub**: [Kritagya-web](https://github.com/Kritagya-web/)
+- **LinkedIn**: [Kritagya Kumra](https://www.linkedin.com/in/kritagya-kumra/)
+- **Portfolio**: [Portfolio](https://kritagyakumraportfolio.netlify.app/)
 
 ---
+<div align="center">
 
-## Connect with me on LinkedIn:  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kastro-kiran/)
+🚀 **Created with love ❤️ by Kritagya. Happy Learning & Secure Deployments!**
 
-## Join the WhatsApp Group for DevOps technical discussions!
-[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/EGw6ZlwUHZc82cA0vXFnwm) 
+</div>
 
----
+<div align="center">
 
-### Feedback Request:  
+🚀  **Show some ❤️ by starring at some of the repositories!**
 
-After deploying the app, please share your opinion on LinkedIn along with the Project link and tag me on LinkedIn. Help the video reach wider DevOps enthusiasts.
-
----
-
-## Happy learning!  
-<img src="https://media.licdn.com/dms/image/v2/D5603AQHJB_lF1d9OSw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1718971147172?e=1735776000&v=beta&t=HC_e0eOufPvf8XQ0P7iI9GDm9hBSIh5FwQaGsL_8ivo" alt="Kastro Profile Image" width="100" height="100" style="border-radius:50%;">
-
-KASTRO KIRAN V
+</div>
